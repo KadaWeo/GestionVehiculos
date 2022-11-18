@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 app = FastAPI()
 datos_diccio = []
-
+#Prueba de edición con invitados.
 # Objeto persona
 class usuario(BaseModel):
     id:str
