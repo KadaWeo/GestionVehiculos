@@ -7,10 +7,14 @@ app = FastAPI()
 datos_diccio = []
 
 # Objeto persona
-class usuario(BaseModel):
-    id:str
-    usuario:str
-    clave:str
+class empleado(BaseModel):
+    cedula:str
+    cargo:str
+    rol:str
+    nombre:str
+    apellido:str
+    telefono:str
+    correo:str
 
 @app.get("/select")
 def mostrar():
@@ -18,7 +22,7 @@ def mostrar():
     return datos_diccio
 
 @app.post("/insert") 
-async def guardar(datos:usuario):
+async def guardar(datos:empleado):
     readDatosDiccio()
     encode_datos = jsonable_encoder(datos)
     datos_diccio.append(encode_datos)
@@ -26,15 +30,18 @@ async def guardar(datos:usuario):
     return {"Mensaje":"Registro almacenado"}
 
 @app.put("/update") 
-def actualizar(datos:usuario):
+def actualizar(datos:empleado):
     print(datos)
     readDatosDiccio()
     estado = False
     id = 0
     for item in datos_diccio:
-        if item["id"] == datos.id:
-            datos_diccio[id]["usuario"] = datos.usuario
-            datos_diccio[id]["clave"] = datos.clave
+        if item["cedula"] == datos.cedula:
+            datos_diccio[id]["rol"] = datos.rol
+            datos_diccio[id]["nombre"] = datos.nombre
+            datos_diccio[id]["apellido"] = datos.apellido
+            datos_diccio[id]["telefono"] = datos.telefono
+            datos_diccio[id]["correo"] = datos.correo
             writeDatosDiccio()
             estado = True
             break 
@@ -46,13 +53,13 @@ def actualizar(datos:usuario):
         return {"Mensaje": "Registro no encontrado"}
 
 @app.delete("/delete")
-def eliminar(datos:usuario):
+def eliminar(datos:empleado):
     print(datos)
     readDatosDiccio()
     id = 0
     estado = False
     for item in datos_diccio:
-        if item["id"] == datos.id:
+        if item["cedula"] == datos.cedula:
             datos_diccio.pop(id)
             estado = True
             writeDatosDiccio()
@@ -65,13 +72,13 @@ def eliminar(datos:usuario):
 
 # abro archivo json y convierto en dicionario
 def readDatosDiccio():
-    fichero = open("usuario.json", "r")
+    fichero = open("empleado.json", "r")
     global datos_diccio
     datos_diccio = json.loads(fichero.read())
     fichero.close()
 
 def writeDatosDiccio():
-    fichero = open("usuario.json", "w")
+    fichero = open("empleado.json", "w")
     #convierto diccionario a archivo Json con identacion
     forWrite = json.dumps(datos_diccio, indent=2)
     fichero.write(forWrite)
