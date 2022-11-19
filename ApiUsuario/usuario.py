@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 app = FastAPI()
 datos_diccio = []
-#Prueba de edición con invitados.
+
 # Objeto persona
 class usuario(BaseModel):
     id:str
@@ -52,7 +52,7 @@ def eliminar(datos:usuario):
     id = 0
     estado = False
     for item in datos_diccio:
-        if item["cedula"] == datos.cedula:
+        if item["id"] == datos.id:
             datos_diccio.pop(id)
             estado = True
             writeDatosDiccio()
